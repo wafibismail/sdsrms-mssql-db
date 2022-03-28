@@ -6,86 +6,88 @@ DROP TABLE IF EXISTS CATEGORY;
 DROP TABLE IF EXISTS PERSON;
 
 CREATE TABLE PERSON --to prevent needless bloating, only record the person's info after he/she has made a booking request
-(	id		INT		IDENTITY(0,1)	PRIMARY KEY,
-	graphId		VARCHAR(32)	UNIQUE,
-	displayName	VARCHAR(255),
-	email	    	VARCHAR(255)	NOT NULL,
-	faculty	  	VARCHAR(50),
-	phone		VARCHAR(15)
+(	Id		INT		IDENTITY(0,1)	PRIMARY KEY,
+	Graph_Id	VARCHAR(32)	UNIQUE,
+	Display_Name	VARCHAR(255),
+	Email	    	VARCHAR(255)	NOT NULL,
+	Faculty	  	VARCHAR(50),
+	Phone		VARCHAR(15)
 );
 
 CREATE TABLE CATEGORY
-(	id		INT		IDENTITY(0,1)	PRIMARY KEY,
-	categoryName	VARCHAR(50)	NOT NULL UNIQUE,
-	parentId	INT,
-FOREIGN KEY (parentId) REFERENCES CATEGORY(id)
+(	Id		INT		IDENTITY(0,1)	PRIMARY KEY,
+	Category_Name	VARCHAR(50)	NOT NULL UNIQUE,
+	Parent_Id	INT,
+FOREIGN KEY (Parent_Id) REFERENCES CATEGORY(Id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION);
 
 CREATE TABLE ITEM
-(	id		INT		IDENTITY(0,1)	PRIMARY KEY,
-	itemName  	VARCHAR(50)	NOT NULL,
- 	internalTagOrStatusRemarks	VARCHAR(255),
- 	externalRemarks	VARCHAR(255),
-	categoryId	INT		NOT NULL,
- 	isConsumable	BIT		NOT NULL,
-	updateTime	DATETIME	NOT NULL,
-FOREIGN KEY (categoryId) REFERENCES CATEGORY(id)
+(	Id		INT		IDENTITY(0,1)	PRIMARY KEY,
+	Item_Name  	VARCHAR(50)	NOT NULL,
+ 	Internal_Tag_Or_Status_Remarks
+ 			VARCHAR(255),
+ 	External_Remarks
+ 			VARCHAR(255),
+	Category_Id	INT		NOT NULL,
+ 	Is_Consumable	BIT		NOT NULL,
+	Update_Time	DATETIME	NOT NULL,
+FOREIGN KEY (Category_Id) REFERENCES CATEGORY(Id)
  	ON DELETE NO ACTION	ON UPDATE CASCADE);
 
 CREATE TABLE CONSUMABLE_ITEM
-(	itemId		INT		NOT NULL,
-	valuePerAmt	INT		NOT NULL,
-	valueUnit	VARCHAR(10)	NOT NULL,
-	amountIn	INT		NOT NULL,
-	amountOut	INT		NOT NULL,
-	--amountBal derived
-	amountUnit	VARCHAR(10)	NOT NULL,
-	nextInAmt	INT,
-	nextInDate	DATETIME,
-	datePurchased	DATETIME,
-	expiryDate	DATETIME,
-FOREIGN KEY (itemId) REFERENCES ITEM(id)
+(	Item_Id		INT		NOT NULL,
+	Value_Per_Amt	INT		NOT NULL,
+	Value_Unit	VARCHAR(10)	NOT NULL,
+	Amount_In	INT		NOT NULL,
+	Amount_Out	INT		NOT NULL,
+	--Amount_Bal to be derived
+	Amount_Unit	VARCHAR(10)	NOT NULL,
+	Next_In_Amt	INT,
+	Next_In_Date	DATETIME,
+	Purchase_Date	DATETIME,
+	Expiry_Date	DATETIME,
+FOREIGN KEY (Item_Id) REFERENCES ITEM(Id)
 	ON DELETE CASCADE	ON UPDATE CASCADE);
 
 CREATE TABLE NONCONSUMABLE_ITEM
-(	itemId		INT		NOT NULL,
-	--isAvalable derived
-	isBlocked	BIT		DEFAULT 0,
-	isOutOfOrder	BIT		DEFAULT 0,
-	isFaulty	BIT		DEFAULT 1,
-	location	VARCHAR(50),
-	brand		VARCHAR(30)	NOT NULL,
-	model		VARCHAR(30)	NOT NULL,
-	equipmentNumber	VARCHAR(40)	NOT NULL,
-	serialNumber	VARCHAR(40)	NOT NULL,
-	assigneeEmail	VARCHAR(255),
-FOREIGN KEY (itemId) REFERENCES ITEM(id)
+(	Item_Id		INT		NOT NULL,
+	--Is_Avalable to be derived
+	Is_Blocked	BIT		DEFAULT 0,
+	Is_OutOfOrder	BIT		DEFAULT 0,
+	Is_Faulty	BIT		DEFAULT 1,
+	Location	VARCHAR(50),
+	Brand		VARCHAR(30)	NOT NULL,
+	Model		VARCHAR(30)	NOT NULL,
+	Equipment_No	VARCHAR(40)	NOT NULL,
+	Serial_No	VARCHAR(40)	NOT NULL,
+	Assignee_Email	VARCHAR(255),
+FOREIGN KEY (Item_Id) REFERENCES ITEM(Id)
 	ON DELETE CASCADE	ON UPDATE CASCADE);
 
 CREATE TABLE RESERVATION
-(	id		INT		IDENTITY(0,1)	PRIMARY KEY,
-	itemId		INT		NOT NULL,
- 	loanLocation	VARCHAR(50),
-	startTime	DATETIME	NOT NULL,
- 	isReleased	BIT		DEFAULT 0,
-	endTime		DATETIME	NOT NULL,
- 	isReturned	BIT		DEFAULT 0,
- 	personId	INT		NOT NULL,
- 	supervisorEmail	VARCHAR(255)	NOT NULL,
- 	responderIdA	INT,
- 	responderIdB	INT,
- 	isPending	BIT		DEFAULT 1,
- 	isApprovedSpvsr	BIT		DEFAULT 0,
- 	isApprovedA	BIT		DEFAULT 0,
- 	isApprovedB	BIT		DEFAULT 0,
-	creationTime	DATETIME	NOT NULL,
-	updateTime	DATETIME,
-FOREIGN KEY (itemId) REFERENCES ITEM(id)
+(	Id		INT		IDENTITY(0,1)	PRIMARY KEY,
+	Item_Id		INT		NOT NULL,
+ 	Loan_Location	VARCHAR(50),
+	Start_Time	DATETIME	NOT NULL,
+ 	Is_Released	BIT		DEFAULT 0,
+	End_Time	DATETIME	NOT NULL,
+ 	Is_Returned	BIT		DEFAULT 0,
+ 	Person_Id	INT		NOT NULL,
+ 	Supervisor_Email	VARCHAR(255)	NOT NULL,
+ 	Responder_Id_A	INT,
+ 	Responder_Id_B	INT,
+ 	Is_Pending	BIT		DEFAULT 1,
+ 	Is_Approved_Sup	BIT		DEFAULT 0,
+ 	Is_Approved_A	BIT		DEFAULT 0,
+ 	Is_Approved_B	BIT		DEFAULT 0,
+	Creation_Time	DATETIME	NOT NULL,
+	Update_Time	DATETIME,
+FOREIGN KEY (Item_Id) REFERENCES ITEM(Id)
 	ON UPDATE CASCADE,
-FOREIGN KEY (responderIdA) REFERENCES PERSON(id)
+FOREIGN KEY (Responder_Id_A) REFERENCES PERSON(Id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION,
-FOREIGN KEY (responderIdB) REFERENCES PERSON(id)
+FOREIGN KEY (Responder_Id_B) REFERENCES PERSON(Id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION);
 
-INSERT INTO CATEGORY (categoryName)
-VALUES ('Sample Category');
+INSERT INTO CATEGORY (Category_Name) VALUES ('Sample Category');
+INSERT INTO CATEGORY (Category_Name) VALUES ('Sample Category 2');
