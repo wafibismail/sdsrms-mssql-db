@@ -52,7 +52,7 @@ FOREIGN KEY (Item_Id) REFERENCES ITEM(Id)
 
 CREATE TABLE NONCONSUMABLE_ITEM
 (	Item_Id		INT		NOT NULL,
-	--Is_Avalable to be derived
+	--Is_Reserved calculated in stored procedure
 	Is_Blocked	BIT		DEFAULT 0,
 	Is_OutOfOrder	BIT		DEFAULT 0,
 	Is_Faulty	BIT		DEFAULT 0,
