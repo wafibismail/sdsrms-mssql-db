@@ -1,6 +1,7 @@
 DROP PROCEDURE IF EXISTS spGetCategories;
-DROP PROCEDURE IF EXISTS spGetConsumables;
-DROP PROCEDURE IF EXISTS spGetNonConsumables;
+DROP PROCEDURE IF EXISTS spGetAllConsumables;
+DROP PROCEDURE IF EXISTS spInsertConsumable;
+DROP PROCEDURE IF EXISTS spGetAllNonConsumables;
 
 --Creation sql for stored procedures need to be run separately one at a time
 
@@ -9,7 +10,7 @@ BEGIN
 SET NOCOUNT ON SELECT * FROM CATEGORY
 END;
 
-CREATE PROCEDURE spGetConsumables AS
+CREATE PROCEDURE spGetAllConsumables AS
 BEGIN
 SET NOCOUNT ON
 SELECT *
@@ -17,7 +18,27 @@ FROM ITEM, CONSUMABLE_ITEM
 WHERE Id = Item.Id
 END;
 
-CREATE PROCEDURE spGetNonConsumables AS
+CREATE PROCEDURE spInsertConsumable (
+	@NAME		VARCHAR(255),
+	@C_ID		INT,
+	@VAL_PER_AMT	INT = 0,
+	@VAL_UNIT	VARCHAR(10) = 'pc',
+	@AMT_IN		INT = 0,
+	@AMT_OUT	INT = 0,
+	@AMT_UNIT	VARCHAR(10) = 'set'
+)
+AS
+BEGIN
+SET NOCOUNT ON
+INSERT INTO ITEM (Item_Name, Category_Id, Is_Consumable)
+VALUES (@NAME, @CID, 1 );
+DECLARE @LASTID AS INT = SCOPE_IDENTITY();
+INSERT INTO CONSUMABLE_ITEM (Item_Id, Value_Per_Amt, Value_Unit, Amount_In, Amount_Out, Amount_Unit)
+VALUES (@LASTID, @VAL, @VALUNIT, @AMTIN, @AMTOUT, @AMTUNIT);
+END;
+
+
+CREATE PROCEDURE spGetAllNonConsumables AS
 BEGIN
 SET NOCOUNT ON
 SELECT *, (
