@@ -13,16 +13,15 @@ END;
 CREATE PROCEDURE spGetConsumables AS
 BEGIN
 SET NOCOUNT ON
-SELECT *,
-  (CASE WHEN EXISTS (
-				SELECT 1
-				FROM RESERVATION R
-			  WHERE ITEM.Id = R.Item_Id
-        AND Start_Time < GETDATE()
-        AND End_Time > GETDATE()
-		  )
-		THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
-	END) AS Is_Reserved 
+SELECT *, (
+		CASE WHEN EXISTS (
+			SELECT 1
+			FROM RESERVATION R
+			WHERE ITEM.Id = R.Item_Id
+	        	AND Start_Time < GETDATE()
+        		AND End_Time > GETDATE()
+		) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END
+	) AS Is_Reserved 
 FROM ITEM, CONSUMABLE_ITEM
 WHERE Id = Item.Id
 END;
@@ -30,16 +29,15 @@ END;
 CREATE PROCEDURE spGetNonConsumables AS
 BEGIN
 SET NOCOUNT ON
-SELECT *,
-  (CASE WHEN EXISTS (
-				SELECT 1
-				FROM RESERVATION R
-			  WHERE ITEM.Id = R.Item_Id
-        AND Start_Time < GETDATE()
-        AND End_Time > GETDATE()
-		  )
-		THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
-	END) AS Is_Reserved 
+SELECT *, (
+		CASE WHEN EXISTS (
+			SELECT 1
+			FROM RESERVATION R
+			WHERE ITEM.Id = R.Item_Id
+			AND Start_Time < GETDATE()
+			AND End_Time > GETDATE()
+		  ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END
+  	) AS Is_Reserved 
 FROM ITEM, NONCONSUMABLE_ITEM
 WHERE Id = Item.Id
 END;
