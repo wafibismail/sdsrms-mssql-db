@@ -2,6 +2,8 @@ DROP PROCEDURE IF EXISTS spGetCategories;
 DROP PROCEDURE IF EXISTS spGetConsumables;
 DROP PROCEDURE IF EXISTS spGetNonConsumables;
 
+--Need to run the creation sql one by one
+
 CREATE PROCEDURE spGetCategories AS
 BEGIN
 SET NOCOUNT ON
