@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS PERSON;
 
 CREATE TABLE PERSON --to prevent needless bloating, only record the person's info after he/she has made a booking request
 (	id		INT		IDENTITY(0,1)	PRIMARY KEY,
-	graphId		VARCHAR(32),
+	graphId		VARCHAR(32)	UNIQUE,
 	displayName	VARCHAR(255),
 	email	    	VARCHAR(255)	NOT NULL,
 	faculty	  	VARCHAR(50),
@@ -18,7 +18,6 @@ CREATE TABLE CATEGORY
 (	id		INT		IDENTITY(0,1)	PRIMARY KEY,
 	categoryName	VARCHAR(50)	NOT NULL UNIQUE,
 	parentId	INT,
-	updateTime	DATETIME	NOT NULL,
 FOREIGN KEY (parentId) REFERENCES CATEGORY(id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION);
 
@@ -28,8 +27,8 @@ CREATE TABLE ITEM
  	internalTagOrStatusRemarks	VARCHAR(255),
  	externalRemarks	VARCHAR(255),
 	categoryId	INT		NOT NULL,
-	updateTime	DATETIME	NOT NULL,
  	isConsumable	BIT		NOT NULL,
+	updateTime	DATETIME	NOT NULL,
 FOREIGN KEY (categoryId) REFERENCES CATEGORY(id)
  	ON DELETE NO ACTION	ON UPDATE CASCADE);
 
@@ -79,11 +78,14 @@ CREATE TABLE RESERVATION
  	isApprovedSpvsr	BIT		DEFAULT 0,
  	isApprovedA	BIT		DEFAULT 0,
  	isApprovedB	BIT		DEFAULT 0,
-	updateTime	DATETIME,
 	creationTime	DATETIME	NOT NULL,
+	updateTime	DATETIME,
 FOREIGN KEY (itemId) REFERENCES ITEM(id)
 	ON UPDATE CASCADE,
 FOREIGN KEY (responderIdA) REFERENCES PERSON(id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION,
 FOREIGN KEY (responderIdB) REFERENCES PERSON(id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION);
+
+INSERT INTO CATEGORY (categoryName)
+VALUES ('Sample Category');
