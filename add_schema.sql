@@ -31,18 +31,18 @@ CREATE TABLE ITEM
  			VARCHAR(255),
 	Category_Id	INT		NOT NULL,
  	Is_Consumable	BIT		NOT NULL,
-	Update_Time	DATETIME	NOT NULL,
+	Update_Time	DATETIME	DEFAULT (GETDATE()),
 FOREIGN KEY (Category_Id) REFERENCES CATEGORY(Id)
  	ON DELETE NO ACTION	ON UPDATE CASCADE);
 
 CREATE TABLE CONSUMABLE_ITEM
 (	Item_Id		INT		NOT NULL,
-	Value_Per_Amt	INT		NOT NULL,
-	Value_Unit	VARCHAR(10)	NOT NULL,
-	Amount_In	INT		NOT NULL,
-	Amount_Out	INT		NOT NULL,
+	Value_Per_Amt	INT		DEFAULT 0,
+	Value_Unit	VARCHAR(10)	DEFAULT 'unit',
+	Amount_In	INT		DEFAULT 0,
+	Amount_Out	INT		DEFAULT 0,
 	Amount_Bal	AS		(Amount_Out - Amount_In),
-	Amount_Unit	VARCHAR(10)	NOT NULL,
+	Amount_Unit	VARCHAR(10)	DEFAULT 'set',
 	Next_In_Amt	INT,
 	Next_In_Date	DATETIME,
 	Purchase_Date	DATETIME,
@@ -81,7 +81,7 @@ CREATE TABLE RESERVATION
  	Is_Approved_Sup	BIT		DEFAULT 0,
  	Is_Approved_A	BIT		DEFAULT 0,
  	Is_Approved_B	BIT		DEFAULT 0,
-	Creation_Time	DATETIME	NOT NULL,
+	Creation_Time	DATETIME	DEFAULT (GETDATE()),
 	Update_Time	DATETIME,
 FOREIGN KEY (Item_Id) REFERENCES ITEM(Id)
 	ON UPDATE CASCADE,
