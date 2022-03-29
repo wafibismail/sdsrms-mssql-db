@@ -2,6 +2,7 @@ DROP PROCEDURE IF EXISTS spGetCategories;
 DROP PROCEDURE IF EXISTS spGetAllConsumables;
 DROP PROCEDURE IF EXISTS spInsertConsumable;
 DROP PROCEDURE IF EXISTS spGetAllNonConsumables;
+DROP PROCEDURE IF EXISTS spInsertNonConsumable;
 
 --Creation sql for stored procedures need to be run separately one at a time
 
@@ -19,22 +20,30 @@ WHERE Id = Item_Id
 END;
 
 CREATE PROCEDURE spInsertConsumable (
-	@NAME		VARCHAR(255),
+	@NAME		VARCHAR(255) = NULL,
+	@INT_REMARKS	VARCHAR(255) = NULL,
+	@EXT_REMARKS	VARCHAR(255) = NULL,
 	@C_ID		INT,
 	@VAL_PER_AMT	INT = 0,
 	@VAL_UNIT	VARCHAR(10) = 'pc',
 	@AMT_IN		INT = 0,
 	@AMT_OUT	INT = 0,
-	@AMT_UNIT	VARCHAR(10) = 'set'
+	@AMT_UNIT	VARCHAR(10) = 'set',
+	@NEXT_IN_AMT	INT = NULL,
+	@NEXT_IN_DATE	DATETIME = NULL,
+	@PURCHASE_DATE	DATETIME = NULL,
+	@EXPIRY_DATE	DATETIME
 )
 AS
 BEGIN
 SET NOCOUNT ON
-INSERT INTO ITEM (Item_Name, Category_Id, Is_Consumable)
-VALUES (@NAME, @C_ID, 1 );
+INSERT INTO ITEM (Item_Name, Internal_Tag_Or_Status_Remarks, External_Remarks, Category_Id, Is_Consumable)
+VALUES (@NAME, @INT_REMARKS, @EXT_REMARKS, @C_ID, 1 );
 DECLARE @LASTID AS INT = SCOPE_IDENTITY();
-INSERT INTO CONSUMABLE_ITEM (Item_Id, Value_Per_Amt, Value_Unit, Amount_In, Amount_Out, Amount_Unit)
-VALUES (@LASTID, @VAL_PER_AMT, @VAL_UNIT, @AMT_IN, @AMT_OUT, @AMT_UNIT);
+INSERT INTO CONSUMABLE_ITEM (Item_Id, Value_Per_Amt, Value_Unit, Amount_In, Amount_Out, Amount_Unit,
+				Next_In_Amt, Next_In_Date, Purchase_Date, Expiry_Date)
+VALUES (@LASTID, @VAL_PER_AMT, @VAL_UNIT, @AMT_IN, @AMT_OUT, @AMT_UNIT,
+	@NEXT_IN_AMT, @NEXT_IN_DATE, @PURCHASE_DATE, @EXPIRY_DATE);
 END;
 
 
