@@ -90,6 +90,21 @@ FOREIGN KEY (Responder_Id_A) REFERENCES PERSON(Id)
 FOREIGN KEY (Responder_Id_B) REFERENCES PERSON(Id)
 	ON DELETE NO ACTION	ON UPDATE NO ACTION);
 
-INSERT INTO CATEGORY (Category_Name) VALUES ('Sample Category A');
-INSERT INTO CATEGORY (Category_Name) VALUES ('Sample Category B');
-INSERT INTO CATEGORY (Category_Name) VALUES ('Sample Category C');
+EXEC spInsertCategory @NAME='Sample Category A';
+EXEC spInsertCategory @NAME='Sample Category B';
+EXEC spInsertCategory @NAME='Sample Category C';
+EXEC spInsertConsumable
+	@NAME		='Sample Item w/ All Details',
+	@INT_REMARKS	='Only the admin can see this; Note @NEXT_IN_AMT @NEXT_IN_DATE, @PURCHASE_DATE, @EXPIRY_DATE params also available',
+	@EXT_REMARKS	='All can see this',
+	@C_ID		=0,
+	@VAL_PER_AMT	=100,
+	@VAL_UNIT	='pc',
+	@AMT_IN		=20,
+	@AMT_OUT	=5,
+	@AMT_UNIT	='set'
+EXEC spInsertConsumable @NAME='Sample Consumable Item w/ Minimal Details', @C_ID=0;
+EXEC spInsertNonConsumable @NAME='Sample Non-Consumable Item w/ Minimal Details', @C_ID=0;
+EXEC spGetCategories;
+--EXEC spPublicGetAllConsumables;
+EXEC spPublicGetAllNonConsumables;
