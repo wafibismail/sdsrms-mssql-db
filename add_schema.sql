@@ -41,7 +41,7 @@ CREATE TABLE CONSUMABLE_ITEM
 	Value_Unit	VARCHAR(10)	DEFAULT 'unit',
 	Amount_In	INT		DEFAULT 0,
 	Amount_Out	INT		DEFAULT 0,
-	Amount_Bal	AS		(Amount_Out - Amount_In),
+	Amount_Bal	AS		(Amount_In - Amount_Out),
 	Amount_Unit	VARCHAR(10)	DEFAULT 'set',
 	Next_In_Amt	INT,
 	Next_In_Date	DATETIME,
