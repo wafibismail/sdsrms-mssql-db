@@ -2,14 +2,16 @@ DROP PROCEDURE IF EXISTS spGetCategories;
 DROP PROCEDURE IF EXISTS spProtectedGetAllConsumables;
 DROP PROCEDURE IF EXISTS spPublicGetAllConsumables;
 DROP PROCEDURE IF EXISTS spInsertConsumable;
-DROP PROCEDURE IF EXISTS spGetAllNonConsumables;
+DROP PROCEDURE IF EXISTS spProtectedGetAllNonConsumables;
+DROP PROCEDURE IF EXISTS spPublicGetAllNonConsumables;
 DROP PROCEDURE IF EXISTS spInsertNonConsumable;
 
 --Creation sql for stored procedures need to be run separately one at a time
 
 CREATE PROCEDURE spGetCategories AS
 BEGIN
-SET NOCOUNT ON SELECT * FROM CATEGORY
+SET NOCOUNT ON
+SELECT * FROM CATEGORY
 END;
 
 CREATE PROCEDURE spProtectedGetAllConsumables AS
@@ -75,7 +77,7 @@ Id, Item_Name, Category_Id, Is_Consumable, Update_Time, Internal_Tag_Or_Status_R
 ) AS Is_Reserved,
 Is_Blocked, Is_OutOfOrder, Is_Faulty, Location, Brand, Model, Equipment_No, Serial_No, Assignee_Email
 FROM ITEM, NONCONSUMABLE_ITEM
-WHERE Id = Item.Id
+WHERE Id = Item_Id
 END;
 
 CREATE PROCEDURE spPublicGetAllNonConsumables AS
@@ -92,7 +94,7 @@ SELECT Id, Item_Name, Category_Id, Is_Consumable, External_Remarks, (
 ) AS Is_Reserved,
 Is_Blocked, Is_OutOfOrder, Is_Faulty, Location, Brand, Model
 FROM ITEM, NONCONSUMABLE_ITEM
-WHERE Id = Item.Id
+WHERE Id = Item_Id
 END;
 
 CREATE PROCEDURE spInsertNonConsumable (
